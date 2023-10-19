@@ -3,8 +3,8 @@
 
 #include <string>
 
-#define CTABLE_DEFAULT_NAME "table"
-#define CTABLE_DEFAULT_LENGTH 5
+#define CTABLE_DEFAULT_NAME "default"
+#define CTABLE_DEFAULT_LENGTH 7
 
 class CTable {
 public:
@@ -31,8 +31,8 @@ private:
 
     std::string s_name;
 
-    int* table;
-    int i_table_len;
+    int* pi_table;
+    int i_table_length;
 
 };
 
