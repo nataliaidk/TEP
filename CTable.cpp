@@ -4,36 +4,36 @@
 
 CTable::CTable() {
     s_name = CTABLE_DEFAULT_NAME;
-    table = new int[CTABLE_DEFAULT_LENGTH];
-    i_table_len = CTABLE_DEFAULT_LENGTH;
+    pi_table = new int[CTABLE_DEFAULT_LENGTH];
+    i_table_length = CTABLE_DEFAULT_LENGTH;
 
-    vSendMessage("bezp: ");
+    std::cout << "bezp: '" << s_name << "'" << std::endl;
 }
 
 CTable::CTable(std::string sName, int iTableLen) {
     s_name = sName;
-    table = new int[iTableLen];
-    i_table_len = iTableLen;
+    pi_table = new int[iTableLen];
+    i_table_length = iTableLen;
 
-    vSendMessage("parametr: ");
+    std::cout << "parametr: '" << s_name << "'" << std::endl;
+
 }
 
 CTable::CTable(CTable& pcOther) {
     s_name = pcOther.s_name + "_copy";
-
-    vSendMessage("kopiuj: ");
-
-    table = new int[pcOther.i_table_len];
-    i_table_len = pcOther.i_table_len;
-
-    vCopyTableFrom(pcOther.table, i_table_len);
+    std::cout << "kopiuj: '" << s_name << "'" << std::endl;
+    i_table_length = pcOther.i_table_length;
+    pi_table = new int[i_table_length];
+    for (int i = 0; i < i_table_length; i++) {
+        pi_table[i] = pcOther.pi_table[i];
+    }
 }
 
 CTable::~CTable() {
-    vSendMessage("usuwam: ");
 
-    delete table;
-    table = NULL;
+    std::cout << "usuwam: '" << s_name << "'" << std::endl;
+    delete pi_table;
+    pi_table = NULL;
 }
 
 void CTable::vSetName(std::string sName) {
@@ -45,21 +45,22 @@ bool CTable::bSetNewSize(int iTableLen) {
         return false;
     }
 
-    int* new_table = new int[iTableLen];
-    int min_length = (i_table_len < iTableLen) ? i_table_len : iTableLen;
+    int* pi_new_table = new int[iTableLen];
+    int min_length = (i_table_length < iTableLen) ? i_table_length : iTableLen;
 
-    std::copy(table, table + min_length, new_table);
-   
+    for (int i = 0; i < min_length; i++) {
+        pi_new_table[i] = pi_table[i];
+    }
     std::cout << "rozmiar stary : " << iGetSize() << std::endl;;
-    delete table;
-    table = new_table;
-    i_table_len = iTableLen;
+    delete pi_table;
+    pi_table = pi_new_table;
+    i_table_length = iTableLen;
     std::cout << "rozmiar nowy : " << iGetSize() << std::endl;;
     return true;
 }
 
 int CTable::iGetSize() {
-    return i_table_len;
+    return i_table_length;
 }
 
 
@@ -68,16 +69,6 @@ CTable* CTable::pcClone() {
 
 }
 
-void CTable::vCopyTableFrom(int* piTable, int iTableLen) {
-    std::copy(piTable, piTable + iTableLen, table);
-
-}
-
-void CTable::vSendMessage(const char* sTitle) {
-    std::cout << sTitle << ": '" << s_name << std::endl;;
-}
-
-#include "CTable.h"
 //ten zmieni tylko kopie
 void v_mod_tab(CTable cTab, int iNewSize) {
     cTab.bSetNewSize(iNewSize);
@@ -97,7 +88,7 @@ int main() {
     delete dynamicTable;
 
     CTable originalTable;
-    CTable copiedTable = originalTable; // Kopiowanie za pomoc¹ konstruktora kopiuj¹cego
+    CTable copiedTable = originalTable; // Kopiowanie za pomocÄ… konstruktora kopiujÄ…cego
     staticTable.vSetName("copy");
 
     CTable resizableTable;
